@@ -14,7 +14,7 @@ public class OrderPos {
     private Integer id;
 
     @Column(name = "ORDERPOS_PRICE", nullable = false)
-    private double price;
+    private Integer price;
 
     @Column(name = "ORDERPOS_QUANTITY", nullable = false)
     private Integer quantity;
@@ -50,7 +50,7 @@ public class OrderPos {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

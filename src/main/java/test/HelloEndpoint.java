@@ -86,7 +86,7 @@ public class HelloEndpoint {
                     product.setOrderPoss(new HashSet<OrderPos>());
 
 
-                    orderPos.setPrice(random.nextDouble());
+                    orderPos.setPrice(random.nextInt());
                     orderPos.setQuantity(random.nextInt());
                     orderPos.setGoodName(String.valueOf(random.nextInt()));
 

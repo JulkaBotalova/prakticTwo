@@ -52,8 +52,6 @@ public class Order {
         this.isuePoint = isuePoint;
     }
 
-
-
     public Integer getId() {
         return id;
     }
