@@ -21,7 +21,7 @@ public class IsuePoint {
     @Column(name = "ADDRESS", length = 255)
     private String address;
 
-    @OneToMany(mappedBy = "isuePoint")
+    @OneToMany(mappedBy = "isuePoint", cascade = CascadeType.ALL)
     private Set<Order> order;
 
     public Integer getId() {

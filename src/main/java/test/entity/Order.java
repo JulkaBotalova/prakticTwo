@@ -11,7 +11,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Order {
 
     @Id
-    @Column(name = "ORDER_ID")
+    @Column (name = "ORDER_ID")
     @GeneratedValue(strategy = IDENTITY)
     private Integer id;
 
@@ -29,7 +29,7 @@ public class Order {
     @JoinColumn (name = "ISUEPOINT_ID", nullable = false)
     private IsuePoint isuePoint;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderPos> orderPoses;
 
     public Set<OrderPos> getOrderPoses() {

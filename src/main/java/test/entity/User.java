@@ -22,7 +22,7 @@ public class User {
     private String userphone;
 
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Order> orderUs;
 
     public Set<Order> getOrderUs() {

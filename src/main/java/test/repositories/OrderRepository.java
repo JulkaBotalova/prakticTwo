@@ -12,16 +12,9 @@ import java.util.Optional;
 
 public interface OrderRepository extends PagingAndSortingRepository<Order, Integer>{
     Optional<Order> findById(Long id);
-    @Query("SELECT entity FROM Order entity")
-    List<Order> getAll();
-
-    @Query("SELECT entity FROM Order entity WHERE entity.id = :#{#_id}")
-    Optional<Order> getOne(@Param("_id") Integer _id);
-
+    List<Order> findAll();
     @Query("SELECT COUNT(entity)>0 FROM Order entity WHERE entity.id = :#{#_entity.id}")
     boolean isIdExists(@Param("_entity") Order _entity);
-
-
 
     @Modifying
     @Transactional

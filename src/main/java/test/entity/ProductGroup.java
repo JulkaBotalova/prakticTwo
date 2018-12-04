@@ -21,7 +21,7 @@ public class ProductGroup {
     @Column(name = "REMARK", length = 255)
     private String remark;
 
-    @OneToMany(mappedBy = "productGroup")
+    @OneToMany(mappedBy = "productGroup", cascade = CascadeType.ALL)
     private Set<Product> products;
 
     public Integer getId() {
