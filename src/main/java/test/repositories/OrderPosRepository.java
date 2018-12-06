@@ -14,8 +14,8 @@ public interface OrderPosRepository extends PagingAndSortingRepository<OrderPos,
     Optional<OrderPos> findById(Long id);
     List<OrderPos> findAll();
 
-    @Query("SELECT COUNT(entity)>0 FROM OrderPos entity WHERE entity.id = :#{#_entity.id}")
-    boolean isIdExists(@Param("_entity") OrderPos _entity);
+    @Query("SELECT COUNT(entity)>id FROM OrderPos entity WHERE id = :#{#id}")
+    boolean isIdExists(@Param("id") Integer id);
 
     @Modifying
     @Transactional

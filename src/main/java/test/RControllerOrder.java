@@ -69,15 +69,25 @@ public class RControllerOrder {
 
     @RequestMapping(value = "/ordersUp")
     Order updateOrder(@RequestParam(value = "id", defaultValue = "") Integer id,
+                      @RequestParam(name = "idUser", defaultValue = "") Integer idUser,
+                      @RequestParam(name = "idIsuePoint", defaultValue = "") Integer idIsuePoint,
                       @RequestParam(name  = "phone", defaultValue = "") String phone,
                       @RequestParam(name  = "remark", defaultValue = "") String remark) {
-        Optional<Order> maybeOrder = orderRepository.findById(id);
-        Order order = maybeOrder
-                .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
-        order.setPhone(phone);
-        order.setRemark(remark);
+        Order orderr = new Order();
+        if (isuePointRepository.findAll().size()<id){
+            orderr = createOrder(idUser, idIsuePoint, phone, remark);
+        }
+        else{
+            Optional<Order> maybeOrder= orderRepository.findById(id);
+            Order order = maybeOrder
+                    .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
+            order.setPhone(phone);
+            order.setRemark(remark);
+            orderr = order;
+            orderRepository.save(order);
+        }
 
-        return orderRepository.save(order);
+        return orderr;
     }
 
 

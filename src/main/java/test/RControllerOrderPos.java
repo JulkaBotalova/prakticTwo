@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @RestController
-@RequestMapping("ControllerOrderPos")
+@RequestMapping("ControllerAll")
 public class RControllerOrderPos {
 
     private final OrderRepository orderRepository;
@@ -81,16 +81,22 @@ public class RControllerOrderPos {
                             @RequestParam(name  = "quantity", defaultValue = "") Integer quantity,
                             @RequestParam(name  = "price", defaultValue = "") Integer price,
                             @RequestParam(name  = "name", defaultValue = "") String name) {
-        Optional<OrderPos> maybeOrderPos = orderPosRepository.findById(id);
-        OrderPos orderPos = maybeOrderPos
-                .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
-        if (getorderPosId(id)==null){
-            createOrderPos(idOrder, idProduct, quantity, price, name);
+        OrderPos orderPosition = new OrderPos();
+        if (orderPosRepository.findAll().size()<id){
+            orderPosition = createOrderPos(idOrder, idProduct, quantity, price, name);
         }
-        orderPos.setQuantity(quantity);
-        orderPos.setPrice(price);
-        orderPos.setGoodName(name);
-        return orderPosRepository.save(orderPos);
+        else{
+            Optional<OrderPos> maybeOrder = orderPosRepository.findById(id);
+            OrderPos orderPos = maybeOrder
+                .orElseThrow(() -> new ExpressionException(String.valueOf(idOrder)));
+            orderPos.setQuantity(quantity);
+            orderPos.setPrice(price);
+            orderPos.setGoodName(name);
+            orderPosition = orderPos;
+            orderPosRepository.save(orderPos);
+        }
+
+        return orderPosition;
     }
 
     @GetMapping("/orderPosDel/{pGroupId}")

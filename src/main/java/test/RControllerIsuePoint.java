@@ -48,23 +48,21 @@ public class RControllerIsuePoint {
     IsuePoint updateIsuePoint( @RequestParam(name = "id", defaultValue = "") Integer id,
                                @RequestParam(name  = "name", defaultValue = "") String name,
                                @RequestParam(name  = "address", defaultValue = "") String address) {
-        Optional<IsuePoint> maybeIP = isuePointRepository.findById(id);
-        IsuePoint isuePoint = maybeIP
-                .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
-
-        if (getIPId(id)==null){
-           // createIsuePoint(name, address);
-            IsuePoint isuePointCreate = new IsuePoint();
-            isuePointCreate.setIsuePointName(name);
-            isuePointCreate.setAddress(address);
-
-             return isuePointRepository.save(isuePointCreate);
+        IsuePoint issuePoint = new IsuePoint();
+        if (isuePointRepository.findAll().size()<id){
+            issuePoint = createIsuePoint(name, address);
+        }
+        else{
+            Optional<IsuePoint> maybeIsuePoint= isuePointRepository.findById(id);
+            IsuePoint isuePoint = maybeIsuePoint
+                    .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
+            isuePoint.setAddress(address);;
+            isuePoint.setIsuePointName(name);
+            issuePoint = isuePoint;
+            isuePointRepository.save(issuePoint);
         }
 
-        isuePoint.setIsuePointName(name);
-        isuePoint.setAddress(address);
-
-        return isuePointRepository.save(isuePoint);
+        return issuePoint;
     }
 
     @GetMapping("/isuepointsDel/{ipId}")

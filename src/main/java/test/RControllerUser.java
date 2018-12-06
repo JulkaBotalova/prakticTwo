@@ -45,13 +45,20 @@ public class RControllerUser {
     User updateUser(@RequestParam(name = "id", defaultValue = "") Integer id,
                     @RequestParam(name  = "name", defaultValue = "") String name,
                     @RequestParam(name  = "phone", defaultValue = "") String phone) {
-        Optional<User> maybeUser = userRepository.findById(id);
-        User user = maybeUser
-                .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
-        user.setUsername(name);
-        user.setUserphone(phone);
-
-        return userRepository.save(user);
+        User user1 = new User();
+        if (userRepository.findAll().size()<id){
+            user1 = createUser(name, phone);
+        }
+        else{
+            Optional<User> maybeUser = userRepository.findById(id);
+            User user = maybeUser
+                    .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
+            user.setUsername(name);
+            user.setUserphone(phone);
+            user1 = user;
+            return userRepository.save(user);
+        }
+        return user1;
     }
 
     @GetMapping("/usersDel/{userId}")

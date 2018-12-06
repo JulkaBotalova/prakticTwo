@@ -4,7 +4,8 @@ import org.springframework.expression.ExpressionException;
 import org.springframework.web.bind.annotation.*;
 import test.entity.Product;
 import test.entity.ProductGroup;
-import test.repositories.*;
+import test.repositories.ProductGroupRepository;
+import test.repositories.ProductRepository;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,13 +37,13 @@ public class RControllerProduct {
     }
 
     @RequestMapping("/productCreate")
-    Product createProduct(@RequestParam(name = "id", defaultValue = "") Integer id,
+    Product createProduct(@RequestParam(name = "idProductGroup", defaultValue = "") Integer idProductGroup,
                           @RequestParam(name  = "name", defaultValue = "") String name,
                           @RequestParam(name  = "price", defaultValue = "") Integer price) {
         Product product = new Product();
-        Optional<ProductGroup> maybeProductGroup  = productGroupRepository.findById(id);
+        Optional<ProductGroup> maybeProductGroup  = productGroupRepository.findById(idProductGroup);
         ProductGroup  productGroup = maybeProductGroup
-                .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
+                .orElseThrow(() -> new ExpressionException(String.valueOf(idProductGroup)));
 
         productGroup.setProducts(new HashSet<Product>());
         product.setProductGroup(productGroup);
@@ -55,14 +56,23 @@ public class RControllerProduct {
 
     @RequestMapping("/productUp")
     Product updateProduct(@RequestParam(name = "id", defaultValue = "") Integer id,
+                          @RequestParam(name = "idProductGroup", defaultValue = "") Integer idProductGroup,
                           @RequestParam(name  = "name", defaultValue = "") String name,
                           @RequestParam(name  = "price", defaultValue = "") Integer price) {
-        Optional<Product> maybeProduct = productRepository.findById(id);
-        Product product = maybeProduct
-                .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
-        product.setProductName(name);
-        product.setProductPrice(price);
-        return productRepository.save(product);
+        Product product1 = new Product();
+        if (productRepository.findAll().size()<id){
+            product1 = createProduct(idProductGroup,name ,price);
+        }
+        else{
+            Optional<Product> maybeProduct  = productRepository.findById(id);
+            Product product = maybeProduct
+                    .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
+            product.setProductName(name);
+            product.setProductPrice(price);
+            product1 = product;
+            return productRepository.save(product);
+        }
+        return product1;
     }
 
     @GetMapping("/productDel/{pGroupId}")

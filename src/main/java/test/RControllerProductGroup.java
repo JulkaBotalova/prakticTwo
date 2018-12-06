@@ -44,12 +44,20 @@ public class RControllerProductGroup {
     ProductGroup updateProductGroup(@RequestParam(name = "id", defaultValue = "") Integer id,
                                     @RequestParam(name  = "name", defaultValue = "") String name,
                                     @RequestParam(name  = "remark", defaultValue = "") String remark) {
-        Optional<ProductGroup> maybeProductGroup = productGroupRepository.findById(id);
-        ProductGroup productGroup = maybeProductGroup
-                .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
-        productGroup.setProductGroupName(name);
-        productGroup.setRemark(remark);
-        return productGroupRepository.save(productGroup);
+        ProductGroup productGroup = new ProductGroup();
+        if (productGroupRepository.findAll().size()<id){
+            productGroup = createProductGroup(name, remark);
+        }
+        else{
+            Optional<ProductGroup> maybeProduct  = productGroupRepository.findById(id);
+            ProductGroup productGroup1 = maybeProduct
+                    .orElseThrow(() -> new ExpressionException(String.valueOf(id)));
+            productGroup1.setRemark(remark);
+            productGroup1.setProductGroupName(name);
+            productGroup = productGroup1;
+            return productGroupRepository.save(productGroup);
+        }
+        return productGroup;
     }
 
     @GetMapping("/productGroupDel/{pGroupId}")
