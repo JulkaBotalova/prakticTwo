@@ -23,7 +23,7 @@ public class Product {
     @Column(name = "PRODUCT_PRICE")
     private Integer productPrice;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OrderPos> orderPoss;
 
     @ManyToOne(targetEntity = ProductGroup.class)

@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IsuePointRepository extends PagingAndSortingRepository<IsuePoint, Integer> {
-    Optional<IsuePoint> findById(Long id);
+    Optional<IsuePoint> findById(Integer id);
     List<IsuePoint> findAll();
 
-    @Query("SELECT COUNT(entity)>0 FROM IsuePoint entity WHERE entity.id = :#{#_entity.id}")
-    boolean isIdExists(@Param("_entity") IsuePoint _entity);
+    @Query("SELECT COUNT(entity) FROM IsuePoint entity")
+    Integer Count(@Param("_entity") IsuePoint _entity);
 
     @Modifying
     @Transactional
